@@ -13,7 +13,7 @@ function ChatApp() {
   const sendMessage = async (msg) => {
     setMessages((msgs) => [...msgs, { from: "user", text: msg }]);
     setLoading(true);
-    const res = await fetch("https://community-issue-reporter-kk98.onrender.com/chat", {
+    const res = await fetch("http://localhost:8000/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: msg })
@@ -43,21 +43,16 @@ function ChatApp() {
   };
 
     return (
-      <div style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg,#43cea2 0%,#185a9d 100%)",
-        padding: "0",
-        margin: "0",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "Segoe UI, Arial, sans-serif"
-      }}>
-        <div style={{
-          maxWidth: 500,
-          width: "100%",
-          margin: "40px auto",
-          background: "rgba(255,255,255,0.98)",
+      <>
+        <div className="animated-bg">
+          <div className="bubble bubble1"></div>
+          <div className="bubble bubble2"></div>
+          <div className="bubble bubble3"></div>
+          <div className="bubble bubble4"></div>
+          <div className="bubble bubble5"></div>
+        </div>
+        <div className="chat-container" style={{
+          // ...existing code...
           boxShadow: "0 4px 24px rgba(25,118,210,0.12)",
           borderRadius: 18,
           padding: 0,
@@ -159,7 +154,7 @@ function ChatApp() {
             >Send</button>
           </div>
         </div>
-      </div>
+      </>
     );
 }
 
