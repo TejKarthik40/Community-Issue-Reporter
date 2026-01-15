@@ -13,7 +13,7 @@ function ChatApp() {
   const sendMessage = async (msg) => {
     setMessages((msgs) => [...msgs, { from: "user", text: msg }]);
     setLoading(true);
-    const res = await fetch("http://localhost:8000/chat", {
+    const res = await fetch("https://community-issue-reporter-kk98.onrender.com/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: msg })
