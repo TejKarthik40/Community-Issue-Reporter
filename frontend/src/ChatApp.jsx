@@ -1,7 +1,13 @@
+
 import React, { useState, useRef, useEffect } from "react";
 
 
 function ChatApp() {
+  // Always clear session_id on load so every reload starts fresh
+  useEffect(() => {
+    localStorage.removeItem("chat_session_id");
+  }, []);
+
   const chatEndRef = useRef(null);
   const [messages, setMessages] = useState([
     { from: "bot", text: "Hello! Please describe your issue." }
@@ -10,17 +16,32 @@ function ChatApp() {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Session persistence
+  const getSessionId = () => {
+    let sessionId = localStorage.getItem("chat_session_id");
+    if (!sessionId) {
+      sessionId = Math.random().toString(36).substring(2) + Date.now();
+      localStorage.setItem("chat_session_id", sessionId);
+    }
+    return sessionId;
+  };
+
   const sendMessage = async (msg) => {
     setMessages((msgs) => [...msgs, { from: "user", text: msg }]);
     setLoading(true);
+    const session_id = getSessionId();
     const res = await fetch("https://community-issue-reporter-kk98.onrender.com/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: msg })
+      body: JSON.stringify({ message: msg, session_id })
     });
     const data = await res.json();
     setMessages((msgs) => [...msgs, { from: "bot", text: data.reply }]);
     setOptions(data.options || []);
+    // If the bot reply contains 'Thank you', clear the session so next reload starts fresh
+    if (data.reply && data.reply.toLowerCase().includes('thank you')) {
+      localStorage.removeItem("chat_session_id");
+    }
     setLoading(false);
   };
 

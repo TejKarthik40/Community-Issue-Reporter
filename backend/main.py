@@ -4,6 +4,7 @@ def is_valid_phone(phone):
     pattern = r"^(\+\d{1,3}[- ]?)?\d{10}$"
     return re.match(pattern, phone)
 from fastapi import FastAPI, Request
+import uuid
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -17,8 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class ChatRequest(BaseModel):
     message: str
+    session_id: str = None
 
 
 from dotenv import load_dotenv
@@ -69,10 +72,12 @@ def field_prompt(field):
     }
     return prompts[field]
 
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
-    # For demo, use a single session (no user auth)
-    session = user_sessions.setdefault("default", {})
+    # Use session_id from frontend, or generate if missing
+    session_id = request.session_id or str(uuid.uuid4())
+    session = user_sessions.setdefault(session_id, {})
     msg = request.message.strip()
 
     # If no issue_type, ask for category

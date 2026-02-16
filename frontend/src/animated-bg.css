@@ -1,4 +1,5 @@
 /* Animated background for the chat app */
+
 body {
   margin: 0;
   padding: 0;
@@ -6,7 +7,6 @@ body {
   font-family: 'Segoe UI', Arial, sans-serif;
   background: linear-gradient(120deg, #43cea2 0%, #185a9d 100%);
   overflow-x: hidden;
-}
 
 .animated-bg {
   position: fixed;
@@ -51,4 +51,33 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 70vh;
+}
+
+@media (max-width: 600px) {
+  .chat-container {
+    max-width: 100vw;
+    width: 100vw;
+    min-height: 60vh;
+    margin: 0;
+    padding: 8vw 2vw 12vw 2vw;
+    border-radius: 0 0 18px 18px;
+    box-shadow: none;
+  }
+  .chat-container input,
+  .chat-container button {
+    font-size: 1rem !important;
+    padding: 10px 12px !important;
+  }
+  .chat-container div[style*="font-size: 2rem"] {
+    font-size: 1.1rem !important;
+    padding: 12px 0 6px 0 !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .chat-container {
+    padding: 4vw 1vw 8vw 1vw;
+    min-height: 60vh;
+  }
+}
 }
